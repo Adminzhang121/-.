@@ -1,0 +1,1034 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>植康驿站 - 病症识别与咨询</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#2E7D32',
+                        secondary: '#8D6E63',
+                        accent: '#FF9800',
+                        light: '#E8F5E9',
+                        dark: '#1B5E20'
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .content-auto {
+                content-visibility: auto;
+            }
+            .text-shadow {
+                text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            }
+            .card-hover {
+                transition: all 0.3s ease;
+            }
+            .card-hover:hover {
+                transform: translateY(-5px);
+                box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            }
+            .bg-gradient-primary {
+                background: linear-gradient(135deg, #2E7D32 0%, #1B5E20 100%);
+            }
+            .animate-fade-in {
+                animation: fadeIn 0.5s ease-in-out;
+            }
+            .animate-slide-up {
+                animation: slideUp 0.5s ease-out;
+            }
+            @keyframes fadeIn {
+                from { opacity: 0; }
+                to { opacity: 1; }
+            }
+            @keyframes slideUp {
+                from { transform: translateY(20px); opacity: 0; }
+                to { transform: translateY(0); opacity: 1; }
+            }
+        }
+    </style>
+</head>
+<body class="bg-light min-h-screen flex flex-col">
+    <!-- 顶部导航栏 -->
+    <header class="sticky top-0 z-50 bg-white/90 backdrop-blur-sm shadow-sm transition-all duration-300">
+        <div class="container mx-auto px-4 py-3 flex items-center justify-between">
+            <div class="flex items-center space-x-2">
+                <i class="fa-solid fa-leaf text-primary text-2xl"></i>
+                <h1 class="text-xl md:text-2xl font-bold text-primary">植康驿站</h1>
+            </div>
+            <nav class="hidden md:flex items-center space-x-8">
+                <a href="#home" class="text-gray-700 hover:text-primary transition-colors">首页</a>
+                <a href="#features" class="text-gray-700 hover:text-primary transition-colors">功能</a>
+                <a href="#how-it-works" class="text-gray-700 hover:text-primary transition-colors">使用流程</a>
+                <a href="#experts" class="text-gray-700 hover:text-primary transition-colors">专家团队</a>
+                <a href="#faq" class="text-gray-700 hover:text-primary transition-colors">常见问题</a>
+            </nav>
+            <div class="flex items-center space-x-4">
+                <button id="login-btn" class="hidden md:block px-4 py-2 rounded-md border border-primary text-primary hover:bg-primary hover:text-white transition-colors">登录</button>
+                <button id="register-btn" class="hidden md:block px-4 py-2 rounded-md bg-primary text-white hover:bg-dark transition-colors">注册</button>
+                <button id="mobile-menu-btn" class="md:hidden text-gray-700 focus:outline-none">
+                    <i class="fa-solid fa-bars text-xl"></i>
+                </button>
+            </div>
+        </div>
+        <!-- 移动端菜单 -->
+        <div id="mobile-menu" class="hidden md:hidden bg-white border-t animate-fade-in">
+            <div class="container mx-auto px-4 py-2 flex flex-col space-y-3">
+                <a href="#home" class="py-2 text-gray-700 hover:text-primary transition-colors">首页</a>
+                <a href="#features" class="py-2 text-gray-700 hover:text-primary transition-colors">功能</a>
+                <a href="#how-it-works" class="py-2 text-gray-700 hover:text-primary transition-colors">使用流程</a>
+                <a href="#experts" class="py-2 text-gray-700 hover:text-primary transition-colors">专家团队</a>
+                <a href="#faq" class="py-2 text-gray-700 hover:text-primary transition-colors">常见问题</a>
+                <div class="flex space-x-3 pt-2">
+                    <button class="flex-1 px-4 py-2 rounded-md border border-primary text-primary hover:bg-primary hover:text-white transition-colors">登录</button>
+                    <button class="flex-1 px-4 py-2 rounded-md bg-primary text-white hover:bg-dark transition-colors">注册</button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="flex-grow">
+        <!-- 英雄区域 -->
+        <section id="home" class="bg-gradient-primary text-white py-16 md:py-24">
+            <div class="container mx-auto px-4 flex flex-col md:flex-row items-center">
+                <div class="md:w-1/2 animate-fade-in">
+                    <h2 class="text-[clamp(2rem,5vw,3.5rem)] font-bold leading-tight text-shadow mb-6">
+                        智能识别植物病症<br>专业解决种植难题
+                    </h2>
+                    <p class="text-lg md:text-xl mb-8 text-white/90 max-w-lg">
+                        通过AI技术快速识别植物病症，连接农业专家获取专业解决方案，让种植更简单高效。
+                    </p>
+                    <div class="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
+                        <button id="start-detection-btn" class="px-8 py-3 rounded-lg bg-white text-primary font-medium hover:bg-light transition-colors shadow-lg">
+                            开始识别
+                        </button>
+                        <button id="consult-expert-btn" class="px-8 py-3 rounded-lg bg-transparent border-2 border-white text-white font-medium hover:bg-white/10 transition-colors">
+                            在线咨询
+                        </button>
+                    </div>
+                </div>
+                <div class="md:w-1/2 mt-12 md:mt-0 animate-slide-up">
+                    <img src="https://picsum.photos/seed/plantapp/600/400" alt="植物病症识别展示" class="rounded-xl shadow-2xl w-full max-w-lg mx-auto">
+                </div>
+            </div>
+        </section>
+
+        <!-- 主要功能区 -->
+        <section id="features" class="py-16 bg-white">
+            <div class="container mx-auto px-4">
+                <div class="text-center mb-16">
+                    <h2 class="text-3xl md:text-4xl font-bold text-gray-800 mb-4">核心功能</h2>
+                    <p class="text-gray-600 max-w-2xl mx-auto">我们提供全面的植物健康管理解决方案，从病症识别到专家咨询，一站式解决您的种植问题</p>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <!-- 功能卡片1：拍照识别 -->
+                    <div class="bg-white rounded-xl shadow-lg p-8 card-hover">
+                        <div class="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mb-6">
+                            <i class="fa-solid fa-camera text-primary text-2xl"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-gray-800 mb-3">拍照识别</h3>
+                        <p class="text-gray-600 mb-4">只需拍摄植物叶片照片，我们的AI系统即可快速分析并识别可能存在的病症，提供详细报告和解决方案。</p>
+                        <ul class="space-y-2 mb-6">
+                            <li class="flex items-start">
+                                <i class="fa-solid fa-check text-primary mt-1 mr-2"></i>
+                                <span class="text-gray-600">识别超过100种常见植物病症</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fa-solid fa-check text-primary mt-1 mr-2"></i>
+                                <span class="text-gray-600">准确率高达95%以上</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fa-solid fa-check text-primary mt-1 mr-2"></i>
+                                <span class="text-gray-600">提供详细的病症分析和处理建议</span>
+                            </li>
+                        </ul>
+                        <button class="text-primary font-medium hover:text-dark transition-colors flex items-center">
+                            了解更多 <i class="fa-solid fa-arrow-right ml-2"></i>
+                        </button>
+                    </div>
+                    
+                    <!-- 功能卡片2：专家咨询 -->
+                    <div class="bg-white rounded-xl shadow-lg p-8 card-hover">
+                        <div class="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mb-6">
+                            <i class="fa-solid fa-users text-primary text-2xl"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-gray-800 mb-3">专家咨询</h3>
+                        <p class="text-gray-600 mb-4">连接专业农业专家，随时获取一对一在线咨询服务，解决复杂种植问题，提高作物产量和质量。</p>
+                        <ul class="space-y-2 mb-6">
+                            <li class="flex items-start">
+                                <i class="fa-solid fa-check text-primary mt-1 mr-2"></i>
+                                <span class="text-gray-600">100+专业农业专家在线服务</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fa-solid fa-check text-primary mt-1 mr-2"></i>
+                                <span class="text-gray-600">24小时内响应咨询</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fa-solid fa-check text-primary mt-1 mr-2"></i>
+                                <span class="text-gray-600">个性化解决方案和持续跟踪</span>
+                            </li>
+                        </ul>
+                        <button class="text-primary font-medium hover:text-dark transition-colors flex items-center">
+                            了解更多 <i class="fa-solid fa-arrow-right ml-2"></i>
+                        </button>
+                    </div>
+                    
+                    <!-- 功能卡片3：植物健康档案 -->
+                    <div class="bg-white rounded-xl shadow-lg p-8 card-hover">
+                        <div class="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mb-6">
+                            <i class="fa-solid fa-book text-primary text-2xl"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-gray-800 mb-3">健康档案</h3>
+                        <p class="text-gray-600 mb-4">为您的植物创建专属健康档案，记录生长过程和病症历史，提供长期健康管理和预防建议。</p>
+                        <ul class="space-y-2 mb-6">
+                            <li class="flex items-start">
+                                <i class="fa-solid fa-check text-primary mt-1 mr-2"></i>
+                                <span class="text-gray-600">建立植物生长全周期记录</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fa-solid fa-check text-primary mt-1 mr-2"></i>
+                                <span class="text-gray-600">智能提醒浇水、施肥和防治</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fa-solid fa-check text-primary mt-1 mr-2"></i>
+                                <span class="text-gray-600">基于数据分析的个性化养护方案</span>
+                            </li>
+                        </ul>
+                        <button class="text-primary font-medium hover:text-dark transition-colors flex items-center">
+                            了解更多 <i class="fa-solid fa-arrow-right ml-2"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 病症识别演示区 -->
+        <section id="detection-demo" class="py-16 bg-light">
+            <div class="container mx-auto px-4">
+                <div class="text-center mb-12">
+                    <h2 class="text-3xl md:text-4xl font-bold text-gray-800 mb-4">拍照识别演示</h2>
+                    <p class="text-gray-600 max-w-2xl mx-auto">上传植物叶片照片，体验我们的AI病症识别功能</p>
+                </div>
+                
+                <div class="bg-white rounded-xl shadow-xl p-8 max-w-4xl mx-auto">
+                    <div class="flex flex-col md:flex-row items-center">
+                        <div class="md:w-1/2 mb-8 md:mb-0 md:pr-8">
+                            <div id="image-preview-container" class="relative w-full h-80 bg-gray-100 rounded-lg overflow-hidden mb-4">
+                                <img id="image-preview" src="https://picsum.photos/seed/plantleaf/400/400" alt="植物叶片预览" class="w-full h-full object-cover">
+                                <div id="upload-overlay" class="absolute inset-0 bg-gray-800/50 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity cursor-pointer">
+                                    <span class="text-white text-lg font-medium">点击上传图片</span>
+                                </div>
+                            </div>
+                            <input type="file" id="image-upload" accept="image/*" class="hidden">
+                            <div class="flex space-x-4">
+                                <button id="upload-btn" class="flex-1 px-4 py-2 rounded-md border border-primary text-primary hover:bg-primary hover:text-white transition-colors">
+                                    <i class="fa-solid fa-upload mr-2"></i> 上传图片
+                                </button>
+                                <button id="take-photo-btn" class="flex-1 px-4 py-2 rounded-md bg-primary text-white hover:bg-dark transition-colors">
+                                    <i class="fa-solid fa-camera mr-2"></i> 拍照
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="md:w-1/2 md:pl-8 border-t md:border-t-0 md:border-l border-gray-200">
+                            <h3 class="text-xl font-bold text-gray-800 mb-4">识别结果</h3>
+                            
+                            <div id="result-loading" class="hidden">
+                                <div class="flex items-center">
+                                    <div class="animate-spin rounded-full h-6 w-6 border-b-2 border-primary mr-3"></div>
+                                    <span class="text-gray-600">正在分析图片，请稍候...</span>
+                                </div>
+                            </div>
+                            
+                            <div id="result-content" class="space-y-4">
+                                <div class="flex items-center">
+                                    <div class="w-12 h-12 rounded-full bg-red-100 flex items-center justify-center mr-4">
+                                        <i class="fa-solid fa-bug text-red-500 text-xl"></i>
+                                    </div>
+                                    <div>
+                                        <h4 class="text-lg font-semibold text-gray-800">番茄晚疫病</h4>
+                                        <p class="text-red-500 font-medium">置信度: 92%</p>
+                                    </div>
+                                </div>
+                                
+                                <div>
+                                    <h5 class="font-semibold text-gray-800 mb-2">病症描述</h5>
+                                    <p class="text-gray-600">番茄晚疫病是由疫霉菌引起的一种毁灭性病害，主要危害叶片、茎和果实，在潮湿条件下迅速蔓延。</p>
+                                </div>
+                                
+                                <div>
+                                    <h5 class="font-semibold text-gray-800 mb-2">解决方案</h5>
+                                    <ul class="space-y-2 text-gray-600">
+                                        <li class="flex items-start">
+                                            <i class="fa-solid fa-circle text-xs text-primary mt-1.5 mr-2"></i>
+                                            <span>立即移除并销毁受感染的植株部分</span>
+                                        </li>
+                                        <li class="flex items-start">
+                                            <i class="fa-solid fa-circle text-xs text-primary mt-1.5 mr-2"></i>
+                                            <span>使用含有铜或甲霜灵的杀菌剂进行喷洒</span>
+                                        </li>
+                                        <li class="flex items-start">
+                                            <i class="fa-solid fa-circle text-xs text-primary mt-1.5 mr-2"></i>
+                                            <span>确保植株间通风良好，避免叶片长时间湿润</span>
+                                        </li>
+                                        <li class="flex items-start">
+                                            <i class="fa-solid fa-circle text-xs text-primary mt-1.5 mr-2"></i>
+                                            <span>轮作种植，避免在同一地点连续种植茄科植物</span>
+                                        </li>
+                                    </ul>
+                                </div>
+                                
+                                <button class="w-full px-4 py-2 rounded-md bg-primary text-white hover:bg-dark transition-colors">
+                                    <i class="fa-solid fa-user-doctor mr-2"></i> 咨询专家获取更多建议
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 使用流程 -->
+        <section id="how-it-works" class="py-16 bg-white">
+            <div class="container mx-auto px-4">
+                <div class="text-center mb-16">
+                    <h2 class="text-3xl md:text-4xl font-bold text-gray-800 mb-4">使用流程</h2>
+                    <p class="text-gray-600 max-w-2xl mx-auto">简单三步，解决您的植物健康问题</p>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
+                    <!-- 步骤1 -->
+                    <div class="text-center">
+                        <div class="relative">
+                            <div class="w-20 h-20 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-6">
+                                <i class="fa-solid fa-camera text-primary text-3xl"></i>
+                            </div>
+                            <div class="absolute -top-2 -right-2 w-8 h-8 bg-primary rounded-full flex items-center justify-center text-white font-bold">1</div>
+                        </div>
+                        <h3 class="text-xl font-bold text-gray-800 mb-3">拍摄或上传照片</h3>
+                        <p class="text-gray-600">使用手机相机拍摄植物叶片的清晰照片，或从相册中选择已有的照片。</p>
+                    </div>
+                    
+                    <!-- 步骤2 -->
+                    <div class="text-center">
+                        <div class="relative">
+                            <div class="w-20 h-20 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-6">
+                                <i class="fa-solid fa-microchip text-primary text-3xl"></i>
+                            </div>
+                            <div class="absolute -top-2 -right-2 w-8 h-8 bg-primary rounded-full flex items-center justify-center text-white font-bold">2</div>
+                        </div>
+                        <h3 class="text-xl font-bold text-gray-800 mb-3">AI分析识别</h3>
+                        <p class="text-gray-600">我们的人工智能系统会快速分析照片，识别可能存在的病症，并生成详细报告。</p>
+                    </div>
+                    
+                    <!-- 步骤3 -->
+                    <div class="text-center">
+                        <div class="relative">
+                            <div class="w-20 h-20 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-6">
+                                <i class="fa-solid fa-comments text-primary text-3xl"></i>
+                            </div>
+                            <div class="absolute -top-2 -right-2 w-8 h-8 bg-primary rounded-full flex items-center justify-center text-white font-bold">3</div>
+                        </div>
+                        <h3 class="text-xl font-bold text-gray-800 mb-3">获取解决方案</h3>
+                        <p class="text-gray-600">查看详细的病症分析和处理建议，如有需要，可随时联系专业专家获取一对一指导。</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 专家团队 -->
+        <section id="experts" class="py-16 bg-light">
+            <div class="container mx-auto px-4">
+                <div class="text-center mb-16">
+                    <h2 class="text-3xl md:text-4xl font-bold text-gray-800 mb-4">专业专家团队</h2>
+                    <p class="text-gray-600 max-w-2xl mx-auto">我们的农业专家拥有丰富的经验和专业知识，随时为您提供支持</p>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                    <!-- 专家1 -->
+                    <div class="bg-white rounded-xl shadow-lg overflow-hidden card-hover">
+                        <img src="https://picsum.photos/seed/expert1/400/300" alt="张教授" class="w-full h-48 object-cover">
+                        <div class="p-6">
+                            <h3 class="text-xl font-bold text-gray-800 mb-1">张教授</h3>
+                            <p class="text-primary font-medium mb-3">植物病理学家</p>
+                            <p class="text-gray-600 mb-4">中国农业大学博士，从事植物病理研究20年，专注于果蔬病害防治。</p>
+                            <div class="flex justify-between items-center">
+                                <div class="flex items-center">
+                                    <i class="fa-solid fa-star text-yellow-400"></i>
+                                    <i class="fa-solid fa-star text-yellow-400"></i>
+                                    <i class="fa-solid fa-star text-yellow-400"></i>
+                                    <i class="fa-solid fa-star text-yellow-400"></i>
+                                    <i class="fa-solid fa-star text-yellow-400"></i>
+                                    <span class="ml-2 text-gray-600">5.0</span>
+                                </div>
+                                <button class="px-3 py-1 rounded-md bg-primary/10 text-primary hover:bg-primary hover:text-white transition-colors">
+                                    立即咨询
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 专家2 -->
+                    <div class="bg-white rounded-xl shadow-lg overflow-hidden card-hover">
+                        <img src="https://picsum.photos/seed/expert2/400/300" alt="李技术员" class="w-full h-48 object-cover">
+                        <div class="p-6">
+                            <h3 class="text-xl font-bold text-gray-800 mb-1">李技术员</h3>
+                            <p class="text-primary font-medium mb-3">农业技术员</p>
+                            <p class="text-gray-600 mb-4">资深农业技术员，拥有15年田间管理经验，擅长蔬菜和果树种植技术指导。</p>
+                            <div class="flex justify-between items-center">
+                                <div class="flex items-center">
+                                    <i class="fa-solid fa-star text-yellow-400"></i>
+                                    <i class="fa-solid fa-star text-yellow-400"></i>
+                                    <i class="fa-solid fa-star text-yellow-400"></i>
+                                    <i class="fa-solid fa-star text-yellow-400"></i>
+                                    <i class="fa-solid fa-star-half-stroke text-yellow-400"></i>
+                                    <span class="ml-2 text-gray-600">4.5</span>
+                                </div>
+                                <button class="px-3 py-1 rounded-md bg-primary/10 text-primary hover:bg-primary hover:text-white transition-colors">
+                                    立即咨询
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 专家3 -->
+                    <div class="bg-white rounded-xl shadow-lg overflow-hidden card-hover">
+                        <img src="https://picsum.photos/seed/expert3/400/300" alt="王博士" class="w-full h-48 object-cover">
+                        <div class="p-6">
+                            <h3 class="text-xl font-bold text-gray-800 mb-1">王博士</h3>
+                            <p class="text-primary font-medium mb-3">土壤肥料专家</p>
+                            <p class="text-gray-600 mb-4">土壤学博士，专注于土壤改良和植物营养研究，提供科学施肥方案。</p>
+                            <div class="flex justify-between items-center">
+                                <div class="flex items-center">
+                                    <i class="fa-solid fa-star text-yellow-400"></i>
+                                    <i class="fa-solid fa-star text-yellow-400"></i>
+                                    <i class="fa-solid fa-star text-yellow-400"></i>
+                                    <i class="fa-solid fa-star text-yellow-400"></i>
+                                    <i class="fa-solid fa-star text-yellow-400"></i>
+                                    <span class="ml-2 text-gray-600">5.0</span>
+                                </div>
+                                <button class="px-3 py-1 rounded-md bg-primary/10 text-primary hover:bg-primary hover:text-white transition-colors">
+                                    立即咨询
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 专家4 -->
+                    <div class="bg-white rounded-xl shadow-lg overflow-hidden card-hover">
+                        <img src="https://picsum.photos/seed/expert4/400/300" alt="赵教授" class="w-full h-48 object-cover">
+                        <div class="p-6">
+                            <h3 class="text-xl font-bold text-gray-800 mb-1">赵教授</h3>
+                            <p class="text-primary font-medium mb-3">昆虫学家</p>
+                            <p class="text-gray-600 mb-4">农业昆虫学教授，擅长害虫生物防治技术，提供绿色防控解决方案。</p>
+                            <div class="flex justify-between items-center">
+                                <div class="flex items-center">
+                                    <i class="fa-solid fa-star text-yellow-400"></i>
+                                    <i class="fa-solid fa-star text-yellow-400"></i>
+                                    <i class="fa-solid fa-star text-yellow-400"></i>
+                                    <i class="fa-solid fa-star text-yellow-400"></i>
+                                    <i class="fa-regular fa-star text-yellow-400"></i>
+                                    <span class="ml-2 text-gray-600">4.0</span>
+                                </div>
+                                <button class="px-3 py-1 rounded-md bg-primary/10 text-primary hover:bg-primary hover:text-white transition-colors">
+                                    立即咨询
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="text-center mt-12">
+                    <button class="px-6 py-3 rounded-lg bg-white text-primary border border-primary hover:bg-primary hover:text-white transition-colors shadow-md">
+                        查看全部专家 <i class="fa-solid fa-arrow-right ml-2"></i>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- 咨询功能演示 -->
+        <section id="consultation" class="py-16 bg-white">
+            <div class="container mx-auto px-4">
+                <div class="text-center mb-12">
+                    <h2 class="text-3xl md:text-4xl font-bold text-gray-800 mb-4">在线咨询</h2>
+                    <p class="text-gray-600 max-w-2xl mx-auto">与农业专家一对一沟通，获取专业建议</p>
+                </div>
+                
+                <div class="bg-white rounded-xl shadow-xl overflow-hidden max-w-4xl mx-auto">
+                    <div class="flex flex-col md:flex-row">
+                        <div class="md:w-1/3 bg-gray-50 p-4 border-b md:border-b-0 md:border-r border-gray-200">
+                            <div class="flex items-center justify-between mb-4">
+                                <h3 class="font-bold text-gray-800">专家列表</h3>
+                                <div class="relative">
+                                    <input type="text" placeholder="搜索专家..." class="pl-8 pr-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-primary/50">
+                                    <i class="fa-solid fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+                                </div>
+                            </div>
+                            
+                            <div class="space-y-3">
+                                <!-- 专家1 -->
+                                <div class="flex items-center p-3 rounded-lg bg-white shadow-sm cursor-pointer hover:bg-primary/5 transition-colors">
+                                    <img src="https://picsum.photos/seed/expert1/100/100" alt="张教授" class="w-12 h-12 rounded-full object-cover">
+                                    <div class="ml-3">
+                                        <h4 class="font-medium text-gray-800">张教授</h4>
+                                        <p class="text-sm text-gray-500">植物病理学家</p>
+                                    </div>
+                                    <div class="ml-auto">
+                                        <span class="inline-block w-2 h-2 rounded-full bg-green-500"></span>
+                                    </div>
+                                </div>
+                                
+                                <!-- 专家2 -->
+                                <div class="flex items-center p-3 rounded-lg bg-white shadow-sm cursor-pointer hover:bg-primary/5 transition-colors">
+                                    <img src="https://picsum.photos/seed/expert2/100/100" alt="李技术员" class="w-12 h-12 rounded-full object-cover">
+                                    <div class="ml-3">
+                                        <h4 class="font-medium text-gray-800">李技术员</h4>
+                                        <p class="text-sm text-gray-500">农业技术员</p>
+                                    </div>
+                                    <div class="ml-auto">
+                                        <span class="inline-block w-2 h-2 rounded-full bg-green-500"></span>
+                                    </div>
+                                </div>
+                                
+                                <!-- 专家3 -->
+                                <div class="flex items-center p-3 rounded-lg bg-white shadow-sm cursor-pointer hover:bg-primary/5 transition-colors">
+                                    <img src="https://picsum.photos/seed/expert3/100/100" alt="王博士" class="w-12 h-12 rounded-full object-cover">
+                                    <div class="ml-3">
+                                        <h4 class="font-medium text-gray-800">王博士</h4>
+                                        <p class="text-sm text-gray-500">土壤肥料专家</p>
+                                    </div>
+                                    <div class="ml-auto">
+                                        <span class="inline-block w-2 h-2 rounded-full bg-gray-400"></span>
+                                    </div>
+                                </div>
+                                
+                                <!-- 专家4 -->
+                                <div class="flex items-center p-3 rounded-lg bg-white shadow-sm cursor-pointer hover:bg-primary/5 transition-colors">
+                                    <img src="https://picsum.photos/seed/expert4/100/100" alt="赵教授" class="w-12 h-12 rounded-full object-cover">
+                                    <div class="ml-3">
+                                        <h4 class="font-medium text-gray-800">赵教授</h4>
+                                        <p class="text-sm text-gray-500">昆虫学家</p>
+                                    </div>
+                                    <div class="ml-auto">
+                                        <span class="inline-block w-2 h-2 rounded-full bg-gray-400"></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="md:w-2/3 flex flex-col">
+                            <div class="p-4 border-b border-gray-200 flex items-center">
+                                <img src="https://picsum.photos/seed/expert1/100/100" alt="张教授" class="w-10 h-10 rounded-full object-cover">
+                                <div class="ml-3">
+                                    <h4 class="font-medium text-gray-800">张教授</h4>
+                                    <p class="text-xs text-green-500">在线 - 通常2小时内回复</p>
+                                </div>
+                            </div>
+                            
+                            <div class="flex-grow p-4 overflow-y-auto" style="max-height: 400px;">
+                                <!-- 专家消息 -->
+                                <div class="flex items-start mb-4">
+                                    <img src="https://picsum.photos/seed/expert1/100/100" alt="张教授" class="w-8 h-8 rounded-full object-cover">
+                                    <div class="ml-2 max-w-[80%]">
+                                        <div class="bg-gray-100 rounded-lg rounded-tl-none p-3">
+                                            <p class="text-gray-800">您好！根据您提供的照片，这是典型的番茄晚疫病症状。这种病害在潮湿条件下容易传播，需要及时处理。</p>
+                                        </div>
+                                        <p class="text-xs text-gray-500 mt-1">10:23</p>
+                                    </div>
+                                </div>
+                                
+                                <!-- 用户消息 -->
+                                <div class="flex items-start justify-end mb-4">
+                                    <div class="mr-2 max-w-[80%]">
+                                        <div class="bg-primary text-white rounded-lg rounded-tr-none p-3">
+                                            <p>请问应该如何治疗和预防呢？最近天气确实比较潮湿。</p>
+                                        </div>
+                                        <p class="text-xs text-gray-500 mt-1 text-right">10:25</p>
+                                    </div>
+                                    <img src="https://picsum.photos/seed/user/100/100" alt="用户头像" class="w-8 h-8 rounded-full object-cover">
+                                </div>
+                                
+                                <!-- 专家消息 -->
+                                <div class="flex items-start mb-4">
+                                    <img src="https://picsum.photos/seed/expert1/100/100" alt="张教授" class="w-8 h-8 rounded-full object-cover">
+                                    <div class="ml-2 max-w-[80%]">
+                                        <div class="bg-gray-100 rounded-lg rounded-tl-none p-3">
+                                            <p class="text-gray-800">治疗方面，建议立即移除并销毁受感染的植株部分，然后使用含有铜或甲霜灵的杀菌剂进行喷洒。预防措施包括确保植株间通风良好，避免叶片长时间湿润，以及轮作种植，避免在同一地点连续种植茄科植物。</p>
+                                        </div>
+                                        <p class="text-xs text-gray-500 mt-1">10:28</p>
+                                    </div>
+                                </div>
+                                
+                                <!-- 用户消息 -->
+                                <div class="flex items-start justify-end mb-4">
+                                    <div class="mr-2 max-w-[80%]">
+                                        <div class="bg-primary text-white rounded-lg rounded-tr-none p-3">
+                                            <p>明白了，谢谢！另外请问这种杀菌剂在当地的农资店能买到吗？还是需要网上购买？</p>
+                                        </div>
+                                        <p class="text-xs text-gray-500 mt-1 text-right">10:30</p>
+                                    </div>
+                                    <img src="https://picsum.photos/seed/user/100/100" alt="用户头像" class="w-8 h-8 rounded-full object-cover">
+                                </div>
+                                
+                                <!-- 专家消息 -->
+                                <div class="flex items-start mb-4">
+                                    <img src="https://picsum.photos/seed/expert1/100/100" alt="张教授" class="w-8 h-8 rounded-full object-cover">
+                                    <div class="ml-2 max-w-[80%]">
+                                        <div class="bg-gray-100 rounded-lg rounded-tl-none p-3">
+                                            <p class="text-gray-800">这类杀菌剂在大多数当地农资店都能买到。您也可以在网上购买，但需要注意选择正规渠道，确保产品质量。使用时请按照说明书的剂量和方法操作。</p>
+                                        </div>
+                                        <p class="text-xs text-gray-500 mt-1">10:32</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="p-4 border-t border-gray-200">
+                                <div class="flex items-center mb-2">
+                                    <button class="text-gray-500 hover:text-primary transition-colors">
+                                        <i class="fa-solid fa-paperclip"></i>
+                                    </button>
+                                    <button class="text-gray-500 hover:text-primary transition-colors ml-3">
+                                        <i class="fa-solid fa-image"></i>
+                                    </button>
+                                    <button class="text-gray-500 hover:text-primary transition-colors ml-3">
+                                        <i class="fa-solid fa-camera"></i>
+                                    </button>
+                                </div>
+                                <div class="flex">
+                                    <input type="text" placeholder="输入您的问题..." class="flex-grow px-4 py-2 rounded-l-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-primary/50">
+                                    <button class="px-4 py-2 bg-primary text-white rounded-r-lg hover:bg-dark transition-colors">
+                                        <i class="fa-solid fa-paper-plane"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 常见问题 -->
+        <section id="faq" class="py-16 bg-light">
+            <div class="container mx-auto px-4">
+                <div class="text-center mb-16">
+                    <h2 class="text-3xl md:text-4xl font-bold text-gray-800 mb-4">常见问题</h2>
+                    <p class="text-gray-600 max-w-2xl mx-auto">解答您可能遇到的问题</p>
+                </div>
+                
+                <div class="max-w-3xl mx-auto">
+                    <div class="space-y-4">
+                        <!-- FAQ 项目1 -->
+                        <div class="bg-white rounded-lg shadow-md overflow-hidden">
+                            <button class="faq-toggle w-full px-6 py-4 text-left font-medium text-gray-800 flex justify-between items-center hover:bg-gray-50 transition-colors">
+                                <span>如何获得更准确的植物病症识别结果？</span>
+                                <i class="fa-solid fa-chevron-down text-gray-500 transition-transform"></i>
+                            </button>
+                            <div class="faq-content hidden px-6 py-4 bg-gray-50 border-t border-gray-200">
+                                <p class="text-gray-600">为了获得更准确的识别结果，请确保拍摄的照片清晰，包含叶片的正面和背面，以及病症的细节特征。尽量在自然光线下拍摄，避免阴影和反光。此外，提供植物的名称、生长环境和病症出现的时间等信息也有助于提高识别准确率。</p>
+                            </div>
+                        </div>
+                        
+                        <!-- FAQ 项目2 -->
+                        <div class="bg-white rounded-lg shadow-md overflow-hidden">
+                            <button class="faq-toggle w-full px-6 py-4 text-left font-medium text-gray-800 flex justify-between items-center hover:bg-gray-50 transition-colors">
+                                <span>在线咨询专家的收费标准是什么？</span>
+                                <i class="fa-solid fa-chevron-down text-gray-500 transition-transform"></i>
+                            </button>
+                            <div class="faq-content hidden px-6 py-4 bg-gray-50 border-t border-gray-200">
+                                <p class="text-gray-600">我们提供多种咨询套餐：基础咨询（免费）可获得系统自动生成的解决方案；专业咨询（19.9元/次）可获得专家的详细解答和建议；高级定制服务（99元/次）包括一对一视频咨询和持续一周的跟踪指导。新用户注册后可获得3次免费专业咨询机会。</p>
+                            </div>
+                        </div>
+                        
+                        <!-- FAQ 项目3 -->
+                        <div class="bg-white rounded-lg shadow-md overflow-hidden">
+                            <button class="faq-toggle w-full px-6 py-4 text-left font-medium text-gray-800 flex justify-between items-center hover:bg-gray-50 transition-colors">
+                                <span>目前系统可以识别哪些植物的病症？</span>
+                                <i class="fa-solid fa-chevron-down text-gray-500 transition-transform"></i>
+                            </button>
+                            <div class="faq-content hidden px-6 py-4 bg-gray-50 border-t border-gray-200">
+                                <p class="text-gray-600">目前我们的系统可以识别超过100种常见植物的病症，包括但不限于：番茄、黄瓜、辣椒、茄子、草莓、葡萄、苹果、柑橘、玫瑰、菊花等果蔬和花卉。我们的AI模型不断学习和更新，将陆续支持更多植物种类。</p>
+                            </div>
+                        </div>
+                        
+                        <!-- FAQ 项目4 -->
+                        <div class="bg-white rounded-lg shadow-md overflow-hidden">
+                            <button class="faq-toggle w-full px-6 py-4 text-left font-medium text-gray-800 flex justify-between items-center hover:bg-gray-50 transition-colors">
+                                <span>咨询专家后多久能得到回复？</span>
+                                <i class="fa-solid fa-chevron-down text-gray-500 transition-transform"></i>
+                            </button>
+                            <div class="faq-content hidden px-6 py-4 bg-gray-50 border-t border-gray-200">
+                                <p class="text-gray-600">我们的专家团队会在24小时内回复您的咨询。对于紧急问题（如大面积病害爆发），您可以选择加急服务，我们会优先处理，确保在4小时内回复。专家在线时间为每天8:00-22:00，非工作时间提交的咨询将在次日工作时间优先处理。</p>
+                            </div>
+                        </div>
+                        
+                        <!-- FAQ 项目5 -->
+                        <div class="bg-white rounded-lg shadow-md overflow-hidden">
+                            <button class="faq-toggle w-full px-6 py-4 text-left font-medium text-gray-800 flex justify-between items-center hover:bg-gray-50 transition-colors">
+                                <span>如何保存我的植物健康记录？</span>
+                                <i class="fa-solid fa-chevron-down text-gray-500 transition-transform"></i>
+                            </button>
+                            <div class="faq-content hidden px-6 py-4 bg-gray-50 border-t border-gray-200">
+                                <p class="text-gray-600">注册并登录账号后，您的所有识别记录和咨询历史都会自动保存在个人中心的"健康档案"中。您可以随时查看、编辑和分享这些记录。此外，我们还提供数据导出功能，支持将重要记录导出为PDF或Excel格式，方便您长期保存和分析。</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 下载区域 -->
+        <section class="py-16 bg-gradient-primary text-white">
+            <div class="container mx-auto px-4 text-center">
+                <h2 class="text-3xl md:text-4xl font-bold mb-6">立即下载植物医生小程序</h2>
+                <p class="text-xl mb-8 max-w-2xl mx-auto">随时随地，为您的植物健康保驾护航</p>
+                
+                <div class="flex flex-col sm:flex-row justify-center items-center space-y-6 sm:space-y-0 sm:space-x-8 mb-12">
+                    <div class="bg-white/10 backdrop-blur-sm rounded-xl p-4 hover:bg-white/20 transition-colors cursor-pointer">
+                        <div class="flex items-center">
+                            <i class="fa-brands fa-apple text-3xl mr-4"></i>
+                            <div class="text-left">
+                                <div class="text-sm">下载</div>
+                                <div class="text-lg font-medium">App Store</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-white/10 backdrop-blur-sm rounded-xl p-4 hover:bg-white/20 transition-colors cursor-pointer">
+                        <div class="flex items-center">
+                            <i class="fa-brands fa-android text-3xl mr-4"></i>
+                            <div class="text-left">
+                                <div class="text-sm">下载</div>
+                                <div class="text-lg font-medium">Google Play</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-white/10 backdrop-blur-sm rounded-xl p-4 hover:bg-white/20 transition-colors cursor-pointer">
+                        <div class="flex items-center">
+                            <i class="fa-solid fa-qrcode text-3xl mr-4"></i>
+                            <div class="text-left">
+                                <div class="text-sm">扫码</div>
+                                <div class="text-lg font-medium">小程序</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="flex flex-wrap justify-center gap-4">
+                    <div class="bg-white/10 backdrop-blur-sm rounded-lg px-4 py-2 flex items-center">
+                        <i class="fa-solid fa-users text-xl mr-2"></i>
+                        <span>100万+用户信赖</span>
+                    </div>
+                    <div class="bg-white/10 backdrop-blur-sm rounded-lg px-4 py-2 flex items-center">
+                        <i class="fa-solid fa-leaf text-xl mr-2"></i>
+                        <span>100+植物种类</span>
+                    </div>
+                    <div class="bg-white/10 backdrop-blur-sm rounded-lg px-4 py-2 flex items-center">
+                        <i class="fa-solid fa-stethoscope text-xl mr-2"></i>
+                        <span>500+专业专家</span>
+                    </div>
+                    <div class="bg-white/10 backdrop-blur-sm rounded-lg px-4 py-2 flex items-center">
+                        <i class="fa-solid fa-check-circle text-xl mr-2"></i>
+                        <span>95%识别准确率</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- 页脚 -->
+    <footer class="bg-gray-900 text-white pt-16 pb-8">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
+                <div>
+                    <div class="flex items-center space-x-2 mb-6">
+                        <i class="fa-solid fa-leaf text-primary text-2xl"></i>
+                        <h3 class="text-xl font-bold">植物医生</h3>
+                    </div>
+                    <p class="text-gray-400 mb-6">专业的植物病症识别与咨询平台，为您的植物健康提供全方位保障。</p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-gray-400 hover:text-white transition-colors">
+                            <i class="fa-brands fa-weixin text-xl"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white transition-colors">
+                            <i class="fa-brands fa-weibo text-xl"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white transition-colors">
+                            <i class="fa-brands fa-qq text-xl"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white transition-colors">
+                            <i class="fa-brands fa-youtube text-xl"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <div>
+                    <h4 class="text-lg font-semibold mb-6">快速链接</h4>
+                    <ul class="space-y-3">
+                        <li><a href="#home" class="text-gray-400 hover:text-white transition-colors">首页</a></li>
+                        <li><a href="#features" class="text-gray-400 hover:text-white transition-colors">功能介绍</a></li>
+                        <li><a href="#how-it-works" class="text-gray-400 hover:text-white transition-colors">使用流程</a></li>
+                        <li><a href="#experts" class="text-gray-400 hover:text-white transition-colors">专家团队</a></li>
+                        <li><a href="#faq" class="text-gray-400 hover:text-white transition-colors">常见问题</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="text-lg font-semibold mb-6">联系我们</h4>
+                    <ul class="space-y-3">
+                        <li class="flex items-start">
+                            <i class="fa-solid fa-map-marker-alt text-primary mt-1 mr-3"></i>
+                            <span class="text-gray-400">北京市海淀区中关村南大街12号</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fa-solid fa-phone text-primary mt-1 mr-3"></i>
+                            <span class="text-gray-400">400-123-4567</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fa-solid fa-envelope text-primary mt-1 mr-3"></i>
+                            <span class="text-gray-400">contact@plantdoctor.com</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fa-solid fa-clock text-primary mt-1 mr-3"></i>
+                            <span class="text-gray-400">周一至周日 8:00-22:00</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="text-lg font-semibold mb-6">订阅我们</h4>
+                    <p class="text-gray-400 mb-4">订阅我们的通讯，获取最新的植物养护知识和平台优惠信息。</p>
+                    <form class="mb-4">
+                        <div class="flex">
+                            <input type="email" placeholder="您的邮箱地址" class="flex-grow px-4 py-2 rounded-l-lg bg-gray-800 border border-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-primary/50">
+                            <button type="submit" class="px-4 py-2 bg-primary text-white rounded-r-lg hover:bg-dark transition-colors">
+                                订阅
+                            </button>
+                        </div>
+                    </form>
+                    <p class="text-gray-500 text-sm">我们尊重您的隐私，不会向第三方分享您的信息。</p>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-800 pt-8">
+                <div class="flex flex-col md:flex-row justify-between items-center">
+                    <p class="text-gray-500 text-sm mb-4 md:mb-0">© 2025 植物医生. 保留所有权利.</p>
+                    <div class="flex space-x-6">
+                        <a href="#" class="text-gray-500 hover:text-white text-sm transition-colors">隐私政策</a>
+                        <a href="#" class="text-gray-500 hover:text-white text-sm transition-colors">服务条款</a>
+                        <a href="#" class="text-gray-500 hover:text-white text-sm transition-colors">关于我们</a>
+                        <a href="#" class="text-gray-500 hover:text-white text-sm transition-colors">帮助中心</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- 登录模态框 -->
+    <div id="login-modal" class="fixed inset-0 bg-black/50 z-50 flex items-center justify-center hidden">
+        <div class="bg-white rounded-xl shadow-2xl max-w-md w-full mx-4 animate-fade-in">
+            <div class="flex justify-between items-center p-6 border-b">
+                <h3 class="text-xl font-bold text-gray-800">登录账号</h3>
+                <button id="close-login-modal" class="text-gray-500 hover:text-gray-800">
+                    <i class="fa-solid fa-times"></i>
+                </button>
+            </div>
+            <div class="p-6">
+                <form>
+                    <div class="mb-4">
+                        <label for="email" class="block text-gray-700 mb-2">邮箱地址</label>
+                        <input type="email" id="email" class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-primary/50" placeholder="请输入您的邮箱">
+                    </div>
+                    <div class="mb-6">
+                        <label for="password" class="block text-gray-700 mb-2">密码</label>
+                        <input type="password" id="password" class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-primary/50" placeholder="请输入您的密码">
+                    </div>
+                    <div class="flex justify-between items-center mb-6">
+                        <div class="flex items-center">
+                            <input type="checkbox" id="remember" class="mr-2">
+                            <label for="remember" class="text-gray-600">记住我</label>
+                        </div>
+                        <a href="#" class="text-primary hover:text-dark">忘记密码?</a>
+                    </div>
+                    <button type="submit" class="w-full py-3 bg-primary text-white rounded-lg hover:bg-dark transition-colors">登录</button>
+                </form>
+                <div class="text-center mt-6">
+                    <p class="text-gray-600">还没有账号? <a href="#" class="text-primary hover:text-dark">立即注册</a></p>
+                </div>
+                <div class="flex items-center my-6">
+                    <div class="flex-grow h-px bg-gray-300"></div>
+                    <span class="px-4 text-gray-500">或使用以下方式登录</span>
+                    <div class="flex-grow h-px bg-gray-300"></div>
+                </div>
+                <div class="flex justify-center space-x-4">
+                    <button class="w-12 h-12 rounded-full bg-[#07C160] flex items-center justify-center text-white hover:bg-opacity-90 transition-colors">
+                        <i class="fa-brands fa-weixin text-xl"></i>
+                    </button>
+                    <button class="w-12 h-12 rounded-full bg-[#1DA1F2] flex items-center justify-center text-white hover:bg-opacity-90 transition-colors">
+                        <i class="fa-brands fa-twitter text-xl"></i>
+                    </button>
+                    <button class="w-12 h-12 rounded-full bg-[#4267B2] flex items-center justify-center text-white hover:bg-opacity-90 transition-colors">
+                        <i class="fa-brands fa-facebook text-xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 返回顶部按钮 -->
+    <button id="back-to-top" class="fixed bottom-6 right-6 w-12 h-12 bg-primary rounded-full flex items-center justify-center text-white shadow-lg opacity-0 invisible transition-all duration-300 hover:bg-dark">
+        <i class="fa-solid fa-arrow-up"></i>
+    </button>
+
+    <script>
+        // 移动端菜单切换
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+        
+        mobileMenuBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+        
+        // 登录模态框
+        const loginBtn = document.getElementById('login-btn');
+        const closeLoginModal = document.getElementById('close-login-modal');
+        const loginModal = document.getElementById('login-modal');
+        
+        loginBtn.addEventListener('click', () => {
+            loginModal.classList.remove('hidden');
+        });
+        
+        closeLoginModal.addEventListener('click', () => {
+            loginModal.classList.add('hidden');
+        });
+        
+        // 点击模态框外部关闭
+        loginModal.addEventListener('click', (e) => {
+            if (e.target === loginModal) {
+                loginModal.classList.add('hidden');
+            }
+        });
+        
+        // FAQ 切换
+        const faqToggles = document.querySelectorAll('.faq-toggle');
+        
+        faqToggles.forEach(toggle => {
+            toggle.addEventListener('click', () => {
+                const content = toggle.nextElementSibling;
+                const icon = toggle.querySelector('i');
+                
+                content.classList.toggle('hidden');
+                icon.classList.toggle('rotate-180');
+            });
+        });
+        
+        // 返回顶部按钮
+        const backToTopBtn = document.getElementById('back-to-top');
+        
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 300) {
+                backToTopBtn.classList.remove('opacity-0', 'invisible');
+                backToTopBtn.classList.add('opacity-100', 'visible');
+            } else {
+                backToTopBtn.classList.remove('opacity-100', 'visible');
+                backToTopBtn.classList.add('opacity-0', 'invisible');
+            }
+        });
+        
+        backToTopBtn.addEventListener('click', () => {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+        
+        // 图片上传预览
+        const imageUpload = document.getElementById('image-upload');
+        const imagePreview = document.getElementById('image-preview');
+        const uploadBtn = document.getElementById('upload-btn');
+        const uploadOverlay = document.getElementById('upload-overlay');
+        
+        function handleImageUpload() {
+            imageUpload.click();
+        }
+        
+        uploadBtn.addEventListener('click', handleImageUpload);
+        uploadOverlay.addEventListener('click', handleImageUpload);
+        
+        imageUpload.addEventListener('change', (e) => {
+            if (e.target.files && e.target.files[0]) {
+                const reader = new FileReader();
+                
+                reader.onload = function(e) {
+                    imagePreview.src = e.target.result;
+                }
+                
+                reader.readAsDataURL(e.target.files[0]);
+            }
+        });
+        
+        // 导航栏滚动效果
+        const header = document.querySelector('header');
+        
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 100) {
+                header.classList.add('py-2');
+                header.classList.add('shadow-md');
+            } else {
+                header.classList.remove('py-2');
+                header.classList.remove('shadow-md');
+            }
+        });
+        
+        // 平滑滚动
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                
+                const targetId = this.getAttribute('href');
+                if (targetId === '#') return;
+                
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    targetElement.scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                    
+                    // 关闭移动菜单
+                    if (!mobileMenu.classList.contains('hidden')) {
+                        mobileMenu.classList.add('hidden');
+                    }
+                }
+            });
+        });
+        
+        // 模拟识别按钮点击效果
+        const startDetectionBtn = document.getElementById('start-detection-btn');
+        const resultLoading = document.getElementById('result-loading');
+        const resultContent = document.getElementById('result-content');
+        
+        startDetectionBtn.addEventListener('click', () => {
+            resultLoading.classList.remove('hidden');
+            resultContent.classList.add('hidden');
+            
+            setTimeout(() => {
+                resultLoading.classList.add('hidden');
+                resultContent.classList.remove('hidden');
+            }, 2000);
+        });
+    </script>
+</body>
+</html>
+    
